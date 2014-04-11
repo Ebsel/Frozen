@@ -558,37 +558,6 @@ var cmds = {
 	if (room.traders.indexOf(user.userid) === -1) room.traders.push(user.userid);
     return this.sendReply('You are ready to trade ' +target);
 	},
-   searchtrade: function(target,room,user) {
-	if(room.id !== 'pokemontrading') return this.parse('only in trading room >_<');
-	if(!this.canBroadcast) return false;
-	var found = [];
-	for (var i=0; i < room.traders.length ; i++) {
-        var loopuser = Users.get(room.traders[i]);
-        var loopchoice = '';
-        if (loopuser) {
-            loopchoice = loopuser.trading;
-            if (loopchoice = target) found.push(loopuser.name);
-        } else {
-            continue;
-        }
-    }
-	if (found === []) {
-        for (var i=0; i < room.traders.length; i++) {
-            var loopuser = Users.get(room.traders[i]);
-            if (loopuser) {
-                loopuser.trading = null;
-            }
-        }
-        return this.sendReply('Nobody found giving' +target+ ' for trade');
-    }
-	if (found.length === 1) {
-    	this.sendReply('The only person who is trading '+target+' was '+ found[0])
-    } else if (found.length) {
-    	this.sendReplyBox('People who are ready to trade '+ target +' are '+ found.toString())
-    } else {
-    	this.sendReply('Nobody found giving' +target+ ' for trade');
-    }
-},
 };
 
 for (var i in cmds) CommandParser.commands[i] = cmds[i];
