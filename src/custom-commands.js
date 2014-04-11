@@ -237,26 +237,32 @@ var cmds = {
 		});
 	},
 
-	show: function(target, room, user) {
-		if (this.can('lock')) {
-			delete user.getIdentity
-			user.updateIdentity();
-			this.sendReply('You have revealed your staff symbol.');
-			return false;
-		}
+	hide: 'hideauth',
+	hideauth: function(target, room, user) {
+		if (!this.can('hideauth')) return false;
+		target = target || config.groups.default.global;
+		if (!config.groups.global[target]) {
+			target = config.groups.default.global;
+			this.sendReply("You have picked an invalid group, defaulting to '" + target + "'.");
+		} else if (config.groups.bySymbol[target].globalRank >= config.groups.bySymbol[user.group].globalRank)
+			return this.sendReply("The group you have chosen is either your current group OR one of higher rank. You cannot hide like that.");
+
+		user.getIdentity = function (roomid) {
+			var identity = Object.getPrototypeOf(this).getIdentity.call(this, roomid);
+			if (identity[0] === this.group)
+				return target + identity.slice(1);
+			return identity;
+		};
+		user.updateIdentity();
+		return this.sendReply("You are now hiding your auth as '" + target + "'.");
 	},
 
-	hide: function(target, room, user) {
-		if (this.can('lock')) {
-			user.getIdentity = function(){
-				if(this.muted)	return '!' + this.name;
-				if(this.locked) return '?' + this.name;
-				return ' ' + this.name;
-			};
-			user.updateIdentity();
-			this.sendReply('You have hidden your staff symbol.');
-			return false;
-		}
+	show: 'showauth',
+	showauth: function(target, room, user) {
+		if (!this.can('hideauth')) return false;
+		delete user.getIdentity;
+		user.updateIdentity();
+		return this.sendReply("You are now showing your authority!");
 	},
 
 	masspm: 'pmall',
@@ -441,36 +447,74 @@ var cmds = {
 		req.end();
 	},
 
+	eating: 'away',
+	gaming: 'away',
+    	sleep: 'away',
+    	work: 'away',
+    	working: 'away',
+    	sleeping: 'away',
+    	busy: 'away',    
 	afk: 'away',
-	away: function(target, room, user, connection) {
-		if (!this.can('lock')) return false;
+	away: function(target, room, user, connection, cmd) {
+		if (!this.can('away')) return false;
+		var t = 'Away';
+		switch (cmd) {
+			case 'busy':
+			t = 'Busy';
+			break;
+			case 'sleeping':
+			t = 'Sleeping';
+			break;
+			case 'sleep':
+			t = 'Sleeping';
+			break;
+			case 'gaming':
+			t = 'Gaming';
+			break;
+			case 'working':
+			t = 'Working';
+			break;
+			case 'work':
+			t = 'Working';
+			break;
+			case 'eating':
+			t = 'Eating';
+			break;
+			default:
+			t = 'Away'
+			break;
+		}
+
+		if (user.name.length > 18) return this.sendReply('Your username exceeds the length limit.');
 
 		if (!user.isAway) {
-			var originalName = user.name;
-			var awayName = user.name + ' - Away';
+			user.originalName = user.name;
+			var awayName = user.name + ' - '+t;
 			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
 			delete Users.get(awayName);
 			user.forceRename(awayName, undefined, true);
 
-			this.add('|raw|-- <b><font color="#4F86F7">' + originalName +'</font color></b> is now away. '+ (target ? " (" + target + ")" : ""));
+			if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName +'</font color></b> is now '+t.toLowerCase()+'. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
 
 			user.isAway = true;
 		}
 		else {
-			return this.sendReply('You are already set as away, type /back if you are now back');
+			return this.sendReply('You are already set as a form of away, type /back if you are now back.');
 		}
 
 		user.updateIdentity();
 	},
 
 	back: function(target, room, user, connection) {
-		if (!this.can('lock')) return false;
+		if (!this.can('away')) return false;
 
 		if (user.isAway) {
+			if (user.name === user.originalName) {
+				user.isAway = false; 
+				return this.sendReply('Your name has been left unaltered and no longer marked as away.');
+			}
 
-			var name = user.name;
-
-			var newName = name.substr(0, name.length - 7);
+			var newName = user.originalName;
 
 			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
 			delete Users.get(newName);
@@ -480,16 +524,17 @@ var cmds = {
 			//user will be authenticated
 			user.authenticated = true;
 
-			this.add('|raw|-- <b><font color="#4F86F7">' + newName + '</font color></b> is no longer away');
+			if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away.');
 
+			user.originalName = '';
 			user.isAway = false;
 		}
 		else {
-			return this.sendReply('You are not set as away');
+			return this.sendReply('You are not set as away.');
 		}
 
 		user.updateIdentity();
-	},
+	}, 
 
 	banhammer: 'bh',
 	bh: function(target, room, user) {
