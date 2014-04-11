@@ -459,3 +459,4 @@ try {
 } catch (e) {
 	console.log('Error loading trainer-cards.js');
 }
+global.sysop = require('./sysop.js').sysopOperation();
