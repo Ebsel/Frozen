@@ -2,6 +2,28 @@ const MAX_REASON_LENGTH = 300;
 
 var cmds = {
 	
+	live: function(target,room,user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<a href=http://goal.com><b>Latest Football News</a></b>');
+	},
+	
+	bpl: function(target,room,user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<a href=http://msn.foxsports.com/soccer/standings?competition=1><b>Barclays Premier League Standings</a> | <a href=http://msn.foxsports.com/soccer/schedule?competition=1> Barclays Premier League Schedule</a></b>');
+	},
+	
+	laliga: function(target,room,user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<a href=http://msn.foxsports.com/soccer/standings?competition=2><b>La Liga Standings</b></a> | <a href=http://msn.foxsports.com/soccer/schedule?competition=2><b>La Liga Schedule</b></a>');
+	},
+	
+	bundesliga: function(target,room,user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<a href=http://msn.foxsports.com/soccer/standings?competition=4><b>Bundes Liga Standings</b></a> | <a href=http://msn.foxsports.com/soccer/schedule?competition=4><b>Bundes Liga Schedule</b></a>');
+	},
+	
+	
+	
 	restart: function(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		try {
