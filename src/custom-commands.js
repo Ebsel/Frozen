@@ -538,26 +538,6 @@ var cmds = {
 			'/givepd <i>username</i>, <i>amount</i> - Gives the user a certain amount of PokeDollars. <i>REQUIRES: [~]</i><br/>'+
 			'/takepd <i>username</i>, <i>amount</i> - Takes a ceratin amount of PokeDollars away from a user. <i>REQUIRES: [~]</i><br/>');
 	},
-	trading: function(target,room,user) {
-		if(!target) return this.sendReply('/trading [on/off] turns [on/off] trading');
-		if(!this.can('roomban', null, room))  return false;
-		if(room.id !== 'pokemontrading') return this.sendReply('only in trading room >_<');
-		if(target == 'on') {
-		room.trade = true;
-		room.traders = [];
-		this.sendReplyBox('You have succesfully turned on trading')
-		}
-		if(target == 'off'){
-		room.trade = false;
-		this.sendReplyBox('You have turned off trading');
-		}
-},
-   give: function(target,room,user) {
-	if(room.id !== 'pokemontrading') return this.parse('only in trading room >_<');
-	user.trading = target;
-	if (room.traders.indexOf(user.userid) === -1) room.traders.push(user.userid);
-    return this.sendReply('You are ready to trade ' +target);
-	},
 };
 
 for (var i in cmds) CommandParser.commands[i] = cmds[i];
