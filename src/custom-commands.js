@@ -1,4 +1,3 @@
-//pretty self-explanatory don't really need to say much about this file - CreaturePhil
 const MAX_REASON_LENGTH = 300;
 
 var cmds = {
