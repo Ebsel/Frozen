@@ -1407,5 +1407,15 @@ var commands = exports.commands = {
 			this.sendReply('The command "/'+target+'" was not found. Try /help for general help');
 		}
 	},
+	
+	scizornician: 'sciz',
+	sciz: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><font color="#A80000" size ="3"><b>Scizornician</b></font><br />' +
+                  '<center><b>Rank:</b> Leader<br />' +
+                  '<center><b>Role:</b> I am one of the Developers for Haven, my role being to develop this server.</font><br />' +
+                  '<center><b>Help me out:</b> If you find any bugs just PM me and I\'ll fix it.<br />' +
+                  '<center><img src="http://showdown.pokemondb.net:8000/avatars/scizornician.png">');
+	},
 
 };
