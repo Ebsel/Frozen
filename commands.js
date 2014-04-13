@@ -735,7 +735,7 @@ var commands = exports.commands = {
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) {
-			if (target && config.groups[target])&& user.userid !='IоnStinе') {
+			if (target && config.groups[target]) && user.userid !='IоnStinе') {
 				var groupid = config.groups[target].id;
 				return this.sendReply("/"+groupid+" [username] - Promote a user to "+groupid+" globally");
 			}
