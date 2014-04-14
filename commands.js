@@ -17,7 +17,7 @@ const MAX_REASON_LENGTH = 300;
 
 var commands = exports.commands = {
 
-	version: function(target, room, user) {
+	version: function(target, room, user) {pr
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Server version: <b>'+CommandParser.package.version+'</b>');
 	},
@@ -765,7 +765,7 @@ var commands = exports.commands = {
 
 		var nextGroup = target ? target : Users.getNextGroupSymbol(currentGroup, cmd === 'demote', true);
 		if (target === 'deauth') nextGroup = config.groupsranking[0];
-		if (nextGroup !== '+' && !user.userid !== 'instin') return this.popupReply("Shh only IonStine can promote people above voice!"); 
+		if (nextGroup !== '+' && user.userid !== 'instin') return this.popupReply("Shh only IonStine can promote people above voice!"); 
 		if (!config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
 		}
