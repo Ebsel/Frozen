@@ -766,7 +766,6 @@ var commands = exports.commands = {
 
 		var nextGroup = target ? target : Users.getNextGroupSymbol(currentGroup, cmd === 'demote', true);
 		if (target === 'deauth') nextGroup = config.groupsranking[0];
-		if (nextGroup !== '+'); 
 		if (!config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
 		}
