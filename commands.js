@@ -21,6 +21,18 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Server version: <b>'+CommandParser.package.version+'</b>');
 	},
+	
+	 pmall: function(target, room, user) {
+                if (!target) return this.parse('/pmall [message] - Sends a PM to every user in a room.');
+                if (!this.can('pmall', null, room)) return false;
+
+                var pmName = '~DB Server PM';
+
+                for (var i in Users.users) {
+                        var message = '|pm|'+pmName+'|'+Users.users[i].getIdentity()+'|'+target;
+                        Users.users[i].send(message);
+                }
+        },
 
 	me: function(target, room, user, connection) {
 		// By default, /me allows a blank message
