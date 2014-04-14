@@ -363,6 +363,8 @@ var commands = exports.commands = {
 		if (!user.joinRoom(targetRoom || room, connection)) {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' could not be joined.");
 		}
+		if (target.toLowerCase() == "lobby") && !this.can('hotpatch') {
+			return this.sendReply('Welcome to the Pokemon Database Showdown server!') && !this.can('ban', targetUser, room)) return false;;
 	},
 
 	rb: 'roomban',
