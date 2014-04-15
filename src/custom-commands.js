@@ -163,73 +163,6 @@ var cmds = {
 		this.add('|raw|'+'<img width="100%" src="'+target+'" >');
 		this.logModCommand(user.name+' declared '+target);
 	},
-
-	stafflist: function(target, room, user, connection) {
-        var buffer = [];
-        var admins = [];
-        var leaders = [];
-        var mods = [];
-        var drivers = [];
-        var voices = [];
-        
-        admins2 = ''; leaders2 = ''; mods2 = ''; drivers2 = ''; voices2 = ''; 
-        stafflist = fs.readFileSync('config/usergroups.csv','utf8');
-        stafflist = stafflist.split('\n');
-        for (var u in stafflist) {
-            line = stafflist[u].split(',');
-			if (line[1] == '~') { 
-                admins2 = admins2 +line[0]+',';
-            } 
-            if (line[1] == '&') { 
-                leaders2 = leaders2 +line[0]+',';
-            }
-            if (line[1] == '@') { 
-                mods2 = mods2 +line[0]+',';
-            } 
-            if (line[1] == '%') { 
-                drivers2 = drivers2 +line[0]+',';
-            } 
-            if (line[1] == '+') { 
-                voices2 = voices2 +line[0]+',';
-             } 
-        }
-        admins2 = admins2.split(',');
-        leaders2 = leaders2.split(',');
-        mods2 = mods2.split(',');
-        drivers2 = drivers2.split(',');
-        voices2 = voices2.split(',');
-        for (var u in admins2) {
-            if (admins2[u] != '') admins.push(admins2[u]);
-        }
-        for (var u in leaders2) {
-            if (leaders2[u] != '') leaders.push(leaders2[u]);
-        }
-        for (var u in mods2) {
-            if (mods2[u] != '') mods.push(mods2[u]);
-        }
-        for (var u in drivers2) {
-            if (drivers2[u] != '') drivers.push(drivers2[u]);
-        }
-        for (var u in voices2) {
-            if (voices2[u] != '') voices.push(voices2[u]);
-        }
-        if (admins.length > 0) {
-            admins = admins.join(', ');
-        }
-        if (leaders.length > 0) {
-            leaders = leaders.join(', ');
-        }
-        if (mods.length > 0) {
-            mods = mods.join(', ');
-        }
-        if (drivers.length > 0) {
-            drivers = drivers.join(', ');
-        }
-        if (voices.length > 0) {
-            voices = voices.join(', ');
-        }
-        connection.popup('Administrators: \n--------------------\n'+admins+'\n\nLeaders:\n-------------------- \n'+leaders+'\n\nModerators:\n-------------------- \n'+mods+'\n\nDrivers: \n--------------------\n'+drivers+'\n\nVoices:\n-------------------- \n'+voices);
-    },
 	
 	suggestion: 'complain',
 	suggest: 'complain',
@@ -354,61 +287,6 @@ var cmds = {
 
 	sweep: function (target, room, user) {
 		return this.parse('/me sweeps');
-	},
-
-	dc: 'poof',
-	poof: (function () {
-		var messages = [
-			"has vanished into nothingness!",
-			"couldn\'t handle the awesomeness of this server!",
-			"was hit by Magikarp\'s Revenge!",
-			"went into a cave without a repel!",
-			"has left the building.",
-			"got eaten by a bunch of piranhas!",
-			"was forced to give his mom an oil massage (boiling oil)!",
-			"ate a bomb!",
-			"is blasting off again!",
-			"tried to touch a girl's boobs!",
-			"took an arrow to the knee!",
-			"Moderation Bot accidently kicked {{user}} from the server!",
-			"was knocked out cold by Firebot!",
-			"recieved a banhammer from Moderaion Bot!",
-			"was dropkick by Moderation Bot!",
-			"become too butthurt and left the server!",
-			"dranked too much balsamic vinegar."
-		];
-
-		return function(target, room, user) {
-			if (config.poofOff) return this.sendReply("Poof is currently disabled.");
-			if (target && !this.can('broadcast')) return false;
-			if (room.id !== 'lobby') return false;
-			var message = target || messages[Math.floor(Math.random() * messages.length)];
-			if (message.indexOf('{{user}}') < 0)
-				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, user.name);
-			if (!this.canTalk(message)) return false;
-
-			var colour = '#' + [1, 1, 1].map(function () {
-				var part = Math.floor(Math.random() * 0xaa);
-				return (part < 0x10 ? '0' : '') + part.toString(16);
-			}).join('');
-
-			room.addRaw('<strong><font color="' + colour + '">~~ ' + sanitize(message) + ' ~~</font></strong>');
-			user.disconnectAll();
-		};
-	})(),
-
-	poofoff: 'nopoof',
-	nopoof: function() {
-		if (!this.can('poofoff')) return false;
-		config.poofOff = true;
-		return this.sendReply("Poof is now disabled.");
-	},
-
-	poofon: function() {
-		if (!this.can('poofoff')) return false;
-		config.poofOff = false;
-		return this.sendReply("Poof is now enabled.");
 	},
 
 	kick: function(target, room, user){
