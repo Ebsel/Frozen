@@ -1642,5 +1642,46 @@ var commands = exports.commands = {
 		tells[toUserid(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
 		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
 	},
+	
+	hide: 'hideauth',
+	hideauth: function(target, room, user){
+		if(!user.can('hideauth'))
+			return this.sendReply( '/hideauth - access denied.');
+
+		var tar = ' ';
+		if(target){
+			target = target.trim();
+			if(config.groupsranking.indexOf(target) > -1){
+				if( config.groupsranking.indexOf(target) <= config.groupsranking.indexOf(user.group)){
+					tar = target;
+				}else{
+					this.sendReply('The group symbol you have tried to use is of a higher authority than you have access to. Defaulting to \' \' instead.');
+				}
+			}else{
+				this.sendReply('You have tried to use an invalid character as your auth symbol. Defaulting to \' \' instead.');
+			}
+		}
+
+		user.getIdentity = function(){
+			if(this.muted)
+				return '!' + this.name;
+			if(this.locked)
+				return '#' + this.name;
+			return tar + this.name;
+		};
+		user.updateIdentity();
+		this.sendReply( 'You are now hiding your auth symbol as \''+tar+ '\'.');
+		return this.logModCommand(user.name + ' is hiding auth symbol as \''+ tar + '\'');
+	},
+
+	showauth: function(target, room, user){
+		if(!user.can('hideauth'))
+			return	this.sendReply( '/showauth - access denied.');
+
+		delete user.getIdentity;
+		user.updateIdentity();
+		this.sendReply('You have now revealed your auth symbol.');
+		return this.logModCommand(user.name + ' has revealed their auth symbol.');
+	},
 
 };
