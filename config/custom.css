@@ -1,13 +1,60 @@
-/**
- * Custom CSS declarations
- *
- * If your server is registered, you can create a file named `custom.css`
- * in the `config` directory and populate it with CSS rules to override the
- * normal client styles, when the client is connected to your server. In
- * other words, you can use this facility to introduce a custom theme for
- * your server.
- */
-
+#header{
+background:url("http://blogs.ca.com/cloud/wp-content/uploads/sites/71/atmosphere-clouds.jpg");
+}
+ 
+/*Main background layout (not picture, just a gradient) Remember that in css, backgrounds reapeat horizontally.*/
 body {
-background: url(http://i3.photobucket.com/albums/y77/shadow_bind/Pokemon/altaria.png) no-repeat left bottom;
+background:url("http://www.fantom-xp.com/wallpapers/49/Glacial_Haven.jpg");
+}
+ 
+/*Main picuture (goes on top of layout so make sure colors match)*/
+.mainmenuwrapper {
+background: url("http://i.neoseeker.com/mgv/519467/467/49/altaria_display.png") center no-repeat;
+}
+ 
+/*Image for chat*/
+        .chat-log {
+           background-image:url("http://i25.photobucket.com/albums/c59/aurumestpotestas/img_altaria.gif");
+           background-position:right bottom;
+           background-repeat:no-repeat;
+}
+ 
+/*Background color in chat*/
+.chat-log-add{
+background:#4068E0
+}
+ 
+/*Color for buttons (teambuilder, search for battle, etc.)*/
+.menugroup .button{
+background:#0092FF
+}
+ 
+.menugroup .menugroup{
+text-align:center
+}
+ 
+/*Color when mouse is hovered over button*/
+.menugroup .button:hover {
+background:#23AFFF
+}
+ 
+/*Color for userlist (Try to keep a different color than the chat background8?*/
+.userlist{
+border-left:1px solid #785936;
+background:#4068E0;
+}
+ 
+/*Userlist color when mouse is hovered over a name*/
+.userlist li button:hover {
+background:#65a8cc;
+}
+ 
+/*Userlist color when mouse is clicked on a name*/
+.userlist li button:active {
+        background: #3f697f
+}
+ 
+/*Pretty sure this is the color of /declares */
+.message-announce {
+background:#000000
 }
