@@ -1472,5 +1472,175 @@ var commands = exports.commands = {
 				return this.sendReply("has been deleted from the reminders.");
 		}
 	},
+	
+	d: 'poof',
+	cpoof: 'poof',
+	poof: (function () {
+		var messages = [
+			"has vanished into nothingness!",
+			"used Explosion!",
+			"fell into the void.",
+			"went into a cave without a repel!",
+			"has left the building.",
+			"was forced to give BlakJack's mom an oil massage!",
+			"was hit by Magikarp's Revenge!",
+			"ate a bomb!",
+			"is blasting off again!",
+			"(Quit: oh god how did this get here i am not good with computer)",
+			"was unfortunate and didn't get a cool message.",
+			"The Immortal accidently kicked {{user}} from the server!",
+		];
+
+		return function(target, room, user) {
+			if (config.poofOff) return this.sendReply("Poof is currently disabled.");
+			if (target && !this.can('broadcast')) return false;
+			if (room.id !== 'lobby') return false;
+			var message = target || messages[Math.floor(Math.random() * messages.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
+			if (!this.canTalk(message)) return false;
+
+			var colour = '#' + [1, 1, 1].map(function () {
+				var part = Math.floor(Math.random() * 0xaa);
+				return (part < 0x10 ? '0' : '') + part.toString(16);
+			}).join('');
+
+			room.addRaw('<strong><font color="' + colour + '">~~ ' + sanitize(message) + ' ~~</font></strong>');
+			user.disconnectAll();
+		};
+	})(),
+	
+	regdate: function(target, room, user, connection) { 
+		if (!this.canBroadcast()) return;
+		if (!target || target == "." || target == "," || target == "'") return this.sendReply('/regdate - Please specify a valid username.');
+		var username = target;
+		target = target.replace(/\s+/g, '');
+		var util = require("util"),
+    	http = require("http");
+
+		var options = {
+    		host: "www.pokemonshowdown.com",
+    		port: 80,
+    		path: "/forum/~"+target
+		};
+
+		var content = "";   
+		var self = this;
+		var req = http.request(options, function(res) {
+
+		    res.setEncoding("utf8");
+		    res.on("data", function (chunk) {
+	        content += chunk;
+    		});
+	    	res.on("end", function () {
+			content = content.split("<em");
+			if (content[1]) {
+				content = content[1].split("</p>");
+				if (content[0]) {
+					content = content[0].split("</em>");
+					if (content[1]) {
+						regdate = content[1];
+						data = username+' was registered on'+regdate+'.';
+					}
+				}
+			}
+			else {
+				data = username+' is not registered.';
+			}
+			self.sendReplyBox(data);
+			room.update();
+		    });
+		});
+		req.end();
+	},
+
+	stafflist: function (target, room, user, connection) {
+	    var buffer = [];
+	    var admins = [];
+	    var leaders = [];
+	    var mods = [];
+	    var drivers = [];
+	    var voices = [];
+
+	    admins2 = '';
+	    leaders2 = '';
+	    mods2 = '';
+	    drivers2 = '';
+	    voices2 = '';
+	    stafflist = fs.readFileSync('config/usergroups.csv', 'utf8');
+	    stafflist = stafflist.split('\n');
+	    for (var u in stafflist) {
+	        line = stafflist[u].split(',');
+	        if (line[1] == '~') {
+	            admins2 = admins2 + line[0] + ',';
+	        }
+	        if (line[1] == '&') {
+	            leaders2 = leaders2 + line[0] + ',';
+	        }
+	        if (line[1] == '@') {
+	            mods2 = mods2 + line[0] + ',';
+	        }
+	        if (line[1] == '%') {
+	            drivers2 = drivers2 + line[0] + ',';
+	        }
+	        if (line[1] == '+') {
+	            voices2 = voices2 + line[0] + ',';
+	        }
+	    }
+	    admins2 = admins2.split(',');
+	    leaders2 = leaders2.split(',');
+	    mods2 = mods2.split(',');
+	    drivers2 = drivers2.split(',');
+	    voices2 = voices2.split(',');
+	    for (var u in admins2) {
+	        if (admins2[u] != '') admins.push(admins2[u]);
+	    }
+	    for (var u in leaders2) {
+	        if (leaders2[u] != '') leaders.push(leaders2[u]);
+	    }
+	    for (var u in mods2) {
+	        if (mods2[u] != '') mods.push(mods2[u]);
+	    }
+	    for (var u in drivers2) {
+	        if (drivers2[u] != '') drivers.push(drivers2[u]);
+	    }
+	    for (var u in voices2) {
+	        if (voices2[u] != '') voices.push(voices2[u]);
+	    }
+	    if (admins.length > 0) {
+	        admins = admins.join(', ');
+	    }
+	    if (leaders.length > 0) {
+	        leaders = leaders.join(', ');
+	    }
+	    if (mods.length > 0) {
+	        mods = mods.join(', ');
+	    }
+	    if (drivers.length > 0) {
+	        drivers = drivers.join(', ');
+	    }
+	    if (voices.length > 0) {
+	        voices = voices.join(', ');
+	    }
+	    connection.popup('Administrators: \n--------------------\n' + admins + '\n\nLeaders:\n-------------------- \n' + leaders + '\n\nModerators:\n-------------------- \n' + mods + '\n\nDrivers: \n--------------------\n' + drivers + '\n\nVoices:\n-------------------- \n' + voices);
+	},
+
+	tell: function(target, room, user) {
+		if (!target) return false;
+		var message = this.splitTarget(target);
+		if (!message) return this.sendReply("You forgot the comma.");
+		if (user.locked) return this.sendReply("You cannot use this command while locked.");
+
+		message = this.canTalk(message, null);
+		if (!message) return false;
+
+		if (!global.tells) global.tells = {};
+		if (!tells[toUserid(this.targetUsername)]) tells[toUserid(this.targetUsername)] = [];
+		if (tells[toUserid(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
+
+		tells[toUserid(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
+		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
+	},
 
 };
