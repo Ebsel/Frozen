@@ -503,8 +503,8 @@ var cmds = {
 			'/givepd <i>username</i>, <i>amount</i> - Gives the user a certain amount of PokeDollars. <i>REQUIRES: [~]</i><br/>'+
 			'/takepd <i>username</i>, <i>amount</i> - Takes a ceratin amount of PokeDollars away from a user. <i>REQUIRES: [~]</i><br/>');
 	},
-};
-reminders: 'reminder',
+	
+	reminders: 'reminder',
 	reminder: function(target, room, user) {
 		if (room.type !== 'chat') return this.sendReply("This command can only be used in chatrooms.");
 
@@ -655,6 +655,7 @@ reminders: 'reminder',
 			}
 		};
 	})(),
+};
 
 for (var i in cmds) CommandParser.commands[i] = cmds[i];
 exports.cmds = cmds;
