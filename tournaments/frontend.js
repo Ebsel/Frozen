@@ -655,12 +655,13 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			"More detailed help can be found <a href=\"https://gist.github.com/kotarou3/7872574\">here</a>"
 		);
 	} else if (cmd === 'create' || cmd === 'new') {
-		if (!user.canBroadcast())
+		if (!user.can('tournaments', room))
+
 			return this.sendReply(cmd + " -  Access denied.");
 		if (params.length < 2)
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 
-		createTournament(room, params.shift(), params.shift(), config.istournamentsrated, params, this);
+		createTournament(room, params.shift(), params.shift(), config.isTournamentsRated, params, this);
 	} else {
 		var tournament = getTournament(room.title);
 		if (!tournament)
@@ -671,13 +672,14 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			commandHandler = typeof commands.basic[cmd] === 'string' ? commands.basic[commands.basic[cmd]] : commands.basic[cmd];
 
 		if (commands.creation[cmd]) {
-			if (!user.canBroadcast())
+        if (!user.can('tournaments', room))
+
 				return this.sendReply(cmd + " -  Access denied.");
 			commandHandler = typeof commands.creation[cmd] === 'string' ? commands.creation[commands.creation[cmd]] : commands.creation[cmd];
 		}
 
 		if (commands.moderation[cmd]) {
-			if (!user.can('tournamentsmoderation', null, room))
+			if (!user.can('tournamentsmoderation', room))
 				return this.sendReply(cmd + " -  Access denied.");
 			commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
 		}
