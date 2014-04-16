@@ -657,3 +657,4 @@ reminders: 'reminder',
 	})(),
 
 for (var i in cmds) CommandParser.commands[i] = cmds[i];
+exports.cmds = cmds;
