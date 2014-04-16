@@ -1032,7 +1032,6 @@ var commands = exports.commands = {
 
 		if (target === 'chat' || target === 'commands') {
 
-			try {
 				CommandParser.uncacheTree('./command-parser.js');
 				CommandParser = require('./command-parser.js');
 
@@ -1041,26 +1040,10 @@ var commands = exports.commands = {
 				Tournaments = require('./tournaments/frontend.js');
 				Tournaments.tournaments = runningTournaments;
 				
-				try {
-					global.economy = require('./src/money.js');
-				} catch (e) {
-					console.log('Error loading economy.js');
-				}
-				try {
-					global.profile = require('./src/profile.js');
-				} catch (e) {
-					console.log('Error loading profile.js');
-				}
-				try {
-					global.customcommands = require('./src/custom-commands.js');
-				} catch (e) {
-					console.log('Error loading custom-commands.js');
-				}
-				try {
-					global.trainercards = require('./src/trainer-cards.js');
-				} catch (e) {
-					console.log('Error loading trainer-cards.js');
-				}
+				global.economy = require('./src/money.js');
+				global.profile = require('./src/profile.js');
+				global.customcommands = require('./src/custom-commands.js');
+				global.trainercards = require('./src/trainer-cards.js');
 
 				return this.sendReply('Chat commands have been hot-patched.');
 			} catch (e) {
