@@ -645,7 +645,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			return {room: tournament.room.title, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
 		})));
 	} else if (cmd === 'help') {
-		if (!this.canBroadcast()) return;
+		if (!this.can('Broadcast')) return;
 		return this.sendReplyBox(
 			"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
 			"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
@@ -655,7 +655,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			"More detailed help can be found <a href=\"https://gist.github.com/kotarou3/7872574\">here</a>"
 		);
 	} else if (cmd === 'create' || cmd === 'new') {
-		if (!user.canBroadcast())
+		if (!user.can('Broadcast'))
 			return this.sendReply(cmd + " -  Access denied.");
 		if (params.length < 2)
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
