@@ -1039,9 +1039,17 @@ var commands = exports.commands = {
 				CommandParser.uncacheTree('./tournaments/frontend.js');
 				Tournaments = require('./tournaments/frontend.js');
 				Tournaments.tournaments = runningTournaments;
+				
+				CommandParser.uncacheTree('./src/money.js');
 				economy = require('./src/money.js');
+				
+				CommandParser.uncacheTree('./src/profile.js');
 				profile = require('./src/profile.js');
+				
+				CommandParser.uncacheTree('./src/custom-commands.js');
 				customcommands = require('./src/custom-commands.js');
+				
+				CommandParser.uncacheTree('./src/trainer-cards.js');
 				trainercards = require('./src/trainer-cards.js');
 
 				return this.sendReply('Chat commands have been hot-patched.');
