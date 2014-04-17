@@ -432,7 +432,6 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 	}
 	Users.checkRangeBanned = Cidr.checker(rangebans);
 });
-<<<<<<< HEAD
 try {
 	global.hangman = require('./src/hangman.js').hangman();
 } catch (e) {
@@ -459,7 +458,7 @@ try {
 	console.log('Error loading trainer-cards.js');
 }
 global.sysop = require('./sysop.js').sysopOperation();
-=======
+
 
 global.Spamroom = require('./spamroom.js');
 
@@ -471,4 +470,3 @@ fs.readFile('./logs/uptime.txt', function (err, uptime) {
 		fs.writeFile('./logs/uptime.txt', global.uptimeRecord.toFixed(0));
 	}, (1).hour());
 });
->>>>>>> upstream/master
