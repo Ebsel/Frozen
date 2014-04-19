@@ -1,5 +1,5 @@
 #header{
-background:url("http://blogs.ca.com/cloud/wp-content/uploads/sites/71/atmosphere-clouds.jpg");
+background:url("http://cdni.wired.co.uk/620x413/s_v/shutterstock_147580883.jpg");
 }
  
 /*Main background layout (not picture, just a gradient) Remember that in css, backgrounds reapeat horizontally.*/
@@ -9,12 +9,12 @@ background:url("http://www.fantom-xp.com/wallpapers/49/Glacial_Haven.jpg");
  
 /*Main picuture (goes on top of layout so make sure colors match)*/
 .mainmenuwrapper {
-background: url("http://i.neoseeker.com/mgv/519467/467/49/altaria_display.png") center no-repeat;
+background: url("http://0-media-cdn.foolz.us/ffuuka/board/vp/image/1385/31/1385316322590.jpg") center no-repeat;
 }
  
 /*Image for chat*/
         .chat-log {
-           background-image:url("http://i25.photobucket.com/albums/c59/aurumestpotestas/img_altaria.gif");
+           background-image:url("http://images4.fanpop.com/image/answers/1482000/1482878_1303241988068.83res_494_460.jpg");
            background-position:right bottom;
            background-repeat:no-repeat;
 }
