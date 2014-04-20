@@ -12,12 +12,6 @@ background:url("http://www.fantom-xp.com/wallpapers/49/Glacial_Haven.jpg");
 background: url("http://0-media-cdn.foolz.us/ffuuka/board/vp/image/1385/31/1385316322590.jpg") center no-repeat;
 }
  
-/*Image for chat*/
-        .chat-log {
-           background-image:url("http://fc09.deviantart.net/fs71/f/2012/254/6/f/glaceon_by_minjixmuu_chan-d5ecn31.png");
-           background-position:right bottom;
-           background-repeat:no-repeat;
-}
  
 /*Background color in chat*/
 .chat-log-add{
